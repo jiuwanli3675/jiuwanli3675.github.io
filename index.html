@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吃饭转盘</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #wheel {
+            border: 16px solid #4CAF50;
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        .slice {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: #4CAF50;
+            transform-origin: 100% 100%;
+            clip-path: polygon(0% 100%, 100% 100%, 100% 0%);
+        }
+        #spin {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="wheel"></div>
+<button id="spin">转动</button>
+<p id="result"></p>
+
+<script>
+    const options = ['餐厅1', '餐厅2', '餐厅3', '餐厅4', '餐厅5']; // 可以更改为你想要的选项
+    const wheel = document.getElementById('wheel');
+    const result = document.getElementById('result');
+    
+    // 创建转盘
+    options.forEach((option, index) => {
+        const slice = document.createElement('div');
+        slice.className = 'slice';
+        slice.style.transform = `rotate(${index * (360 / options.length)}deg)`;
+        slice.textContent = option;
+        slice.style.display = 'flex';
+        slice.style.alignItems = 'flex-end';
+        slice.style.justifyContent = 'center';
+        slice.style.color = 'white';
+        slice.style.fontWeight = 'bold';
+        wheel.appendChild(slice);
+    });
+
+    document.getElementById('spin').addEventListener('click', () => {
+        const randomDegree = Math.floor(Math.random() * 360) + 720; // 随机旋转度数
+        wheel.style.transition = 'transform 4s ease-out';
+        wheel.style.transform = `rotate(${randomDegree}deg)`;
+
+        setTimeout(() => {
+            const winningSlice = options[Math.floor(((randomDegree % 360) / (360 / options.length)))];
+            result.textContent = `你吃 ${winningSlice}！`;
+        }, 4000); // 等待转盘停止后显示结果
+    });
+</script>
+
+</body>
+</html>
